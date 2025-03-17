@@ -165,7 +165,7 @@ str *s2 = (str*) malloc(sizeof(str));;
 s2->n = 1;
 ```
 
-### Liste Concatenate
+### Liste Concatenate (linkate)
 
 Creazione di una lista da 3 elementi
 
@@ -232,3 +232,33 @@ Creazione di una lista da 3 elementi
 
 ![alt text](liste.png)
 
+5) Eliminare un elemento della lista
+
+   Per eliminare un elemento della lista, bisogna cambiare il valore della variabile `next`, facendo puntare il puntatore ad un altro elemento della lista.
+
+   Ricordarsi poi di fare la `free()` per deallocare l'elemento della lista ormai superfluo
+
+   ```c
+   void cancella_testa(lista *L) {
+     lista tmp = (*L);
+     *L = (*L)->next;
+     free(tmp);
+   }
+   ```
+
+   ![Elimina primo elemento dalla lista](elimina-elemento.png)
+
+6) Aggiungere un elemento in testa
+
+   ```c
+   void aggiungi_in_testa(lista *L, lista nuovo) {
+     nuovo->next = *L;
+     *L = nuovo;
+   }
+   ```
+
+   ![Aggiungi elemento nella testa della lista](aggiungi-elemento.png)
+
+#### Tipologie di liste
+
+![Tipi di liste](tipi-liste.png)
