@@ -3,6 +3,7 @@
 
 #include <stdbool.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 /**  Un tipo di dato per i contatti telefonici e cyberspaziali
