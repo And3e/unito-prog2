@@ -116,7 +116,7 @@ sizeof(struct s) = 8
 sizeof(char)*2 + sizeof(int) = 6
 ```
 
-###  `typedef`
+### `typedef`
 
 Spesso struct viene usato insieme a `typedef`
 
@@ -144,11 +144,10 @@ l = NULL;
 
 ! Ricordarsi `l = NULL`
 
-
 ### Differenza tra `.` e `->`
 
-* Si usa `.` quando si ha a che fare con **VARIABILI**
-* Si usa `->` quando si ha a che fare con **PUNTATORI**
+- Si usa `.` quando si ha a che fare con **VARIABILI**
+- Si usa `->` quando si ha a che fare con **PUNTATORI**
 
 ```c
 typedef struct {
@@ -169,70 +168,72 @@ s2->n = 1;
 
 Creazione di una lista da 3 elementi
 
-1) Dichiarazione
-    ```c
-    typedef struct nodo {
-      int a;
-      float b;
-      char c;
+1. Dichiarazione
 
-      struct nodo* next;
-    } nodo;
+   ```c
+   typedef struct nodo {
+     int a;
+     float b;
+     char c;
 
-    typedef nodo* lista;
-    ```
+     struct nodo* next;
+   } nodo;
 
-2) Assegnazione
+   typedef nodo* lista;
+   ```
 
-    ```c
-    lista head = malloc(sizeof(nodo));
+2. Assegnazione
 
-    head->a = 1;
-    head->b = 1.1;
-    head->c = 'A';
-    head->next = NULL;
+   ```c
+   lista head = malloc(sizeof(nodo));
 
-    // Creazione del secondo nodo
-    lista secondo = malloc(sizeof(nodo));
+   head->a = 1;
+   head->b = 1.1;
+   head->c = 'A';
+   head->next = NULL;
 
-    secondo->a = 2;
-    secondo->b = 2.2;
-    secondo->c = 'B';
-    secondo->next = NULL;
-    head->next = secondo; // Collegamento del primo al secondo nodo
+   // Creazione del secondo nodo
+   lista secondo = malloc(sizeof(nodo));
 
-    // Creazione del terzo nodo
-    lista terzo = malloc(sizeof(nodo));
+   secondo->a = 2;
+   secondo->b = 2.2;
+   secondo->c = 'B';
+   secondo->next = NULL;
+   head->next = secondo; // Collegamento del primo al secondo nodo
 
-    terzo->a = 3;
-    terzo->b = 3.3;
-    terzo->c = 'C';
-    terzo->next = NULL;
-    secondo->next = terzo; // Collegamento del secondo al terzo nodo
-    ```
+   // Creazione del terzo nodo
+   lista terzo = malloc(sizeof(nodo));
 
-3) Visualizzazione
-    ```c
-    // Stampa della lista
-    lista temp = head;
-    while (temp != NULL) {
-      printf("Nodo: a=%d, b=%.1f, c=%c\n", temp->a, temp->b, temp->c);
-      temp = temp->next;
-    }
-    ```
+   terzo->a = 3;
+   terzo->b = 3.3;
+   terzo->c = 'C';
+   terzo->next = NULL;
+   secondo->next = terzo; // Collegamento del secondo al terzo nodo
+   ```
 
-4) Deallocazione
-    ```c
-    while (head != NULL) {
-      lista temp = head;
-      head = head->next;
-      free(temp);
-    }
-    ```
+3. Visualizzazione
+
+   ```c
+   // Stampa della lista
+   lista temp = head;
+   while (temp != NULL) {
+     printf("Nodo: a=%d, b=%.1f, c=%c\n", temp->a, temp->b, temp->c);
+     temp = temp->next;
+   }
+   ```
+
+4. Deallocazione
+   ```c
+   while (head != NULL) {
+     lista temp = head;
+     head = head->next;
+     free(temp);
+   }
+   ```
 
 ![alt text](imgs/liste.png)
 
-5) Eliminare un elemento della lista
+5. Eliminare un elemento della lista
 
    Per eliminare un elemento della lista, bisogna cambiare il valore della variabile `next`, facendo puntare il puntatore ad un altro elemento della lista.
 
@@ -248,7 +249,7 @@ Creazione di una lista da 3 elementi
 
    ![Elimina primo elemento dalla lista](imgs/elimina-elemento.png)
 
-6) Aggiungere un elemento in testa
+6. Aggiungere un elemento in testa
 
    ```c
    void aggiungi_in_testa(lista *L, lista nuovo) {
@@ -262,3 +263,193 @@ Creazione di una lista da 3 elementi
 #### Tipologie di liste
 
 ![Tipi di liste](imgs/tipi-liste.png)
+
+### Funzioni `ricorsive` su liste
+
+Esempio:
+
+```c
+int somma_nodi(lista l) {
+  if (l == NULL) return 0;
+  return (l->dato + somma_nodi(l->next));
+}
+```
+
+Controparte iterativa:
+
+```c
+int somma_iter(lista l) {
+  int ris = 0;
+
+  while (l) {
+    ris += l->dato;
+    l = l->next;
+  }
+
+  return ris;
+}
+```
+
+#### RICORSIONE in `testa`/`coda`
+
+**`TESTA`**
+
+```c
+tipo-ritorno FUNZIONE(params …) {
+  if (test-caso-base1) ... return1
+  ...
+
+  else {
+    [vrb-temp =] FUNZIONE(...); // prima richiamo ricorsivo
+    elabora nodo corrente // poi elaboro il nodo corrente
+    return ...
+  }
+}
+
+// ESEMPIO
+void stampa(lista l) {
+  if (l != NULL) {
+    printf(" %d,", l->dato); // elaboro nodo
+    stampa(l->next); // ricorsione sul next
+  }
+  else printf(" /\n");
+}
+```
+
+**`CODA`**
+
+```c
+tipo-ritorno FUNZIONE(params …) {
+  if (test-caso-base1) ... return1
+  ...
+
+  else {
+    elabora nodo corrente // prima elaboro il nodo corrente
+    [vrb-temp =] FUNZIONE(...); // poi richiamo ricorsivo
+    return ...
+  }
+}
+
+// ESEMPIO
+void stampa_inversa(lista l) {
+  if (l != NULL) {
+    stampa_inversa(l->next); // ricorsione sul next
+    printf(" %d,", l->dato); // elaboro nodo
+  }
+  else printf(" /\n");
+}
+```
+
+#### Ricorsione in `testa`/`coda` con valore di ritorno
+
+**Richiamo in `testa`**
+
+```c
+int conta(lista L, int S) {
+  if (!L) return 0;
+  else if (L->peso >= S) return 0;
+  else {
+    int temp = conta(L->next,S);
+    return (1 + temp);
+  }
+}
+```
+
+**Richiamo in `coda`**
+
+```c
+int conta2(lista l, int S) {
+  if (!l) return 0; // (1) caso base lista vuota
+  else if (l->peso >= S) return 0; // (2) caso base non ho altro da contare
+
+  return (1 + conta2(l->next, S));
+}
+```
+
+##### Rimozione in `coda` con ricorsione in `testa`
+
+**Lista passata per riferimento**
+
+```c
+void elimina_lista(lista *l) {
+  if (l) {
+    if (*l) { // se la lista non è vuota
+      elimina_lista(&((*l)->next)); // mi sposto avanti
+      free(*l); // libero il nodo (attuale ultimo)
+      *l = NULL;
+    }
+  }
+}
+```
+
+**Lista passata per valore**
+
+```c
+lista elimina_lista(lista l) {
+  if (l) {
+    l->next=elimina_lista(l->next);
+    free(l);
+    return NULL;
+  }
+
+  return NULL;
+}
+```
+
+##### Inserimento di un elemento nella lista [ORDINATA]
+
+**Lista passata per valore**
+
+```c
+lista inserimento_ordinato(lista l, lista nodo) {
+  if (l) {
+    if (nodo->dato <= l->dato) {
+      // nodo inserito nella prima posizione
+      nodo->next = l;
+      return nodo;
+    } else if (nodo->dato < l->next->dato) {
+      // nodo maggiore di `l` e minore di `l->next`
+      nodo->next = l->next;
+      l->next = nodo;
+      return l;
+    } else {
+      // nodo maggiore sia di `l` sia di `l-next`
+      // non sono nella posizione giusta, ricorsione
+      l->next = inserimento_ordinato(l->next, nodo);
+      return l;
+    }
+  }
+
+  return nodo;
+}
+```
+
+**Lista passata per riferimento**
+
+```c
+void inserimento_ordinato(lista *l, lista nodo) {
+  if (l) {
+    if (*l) {
+      if (nodo->dato <= (*l)->dato) {
+        // nodo va inserito in prima posizione
+        nodo->next = *l;
+        *l = nodo;
+      } else if (!((*l)->next)) {
+        // `l` ultimo e nodo maggiore di `l`, diventa lui l'ultimo
+        (*l)->next = nodo;
+        nodo->next = NULL;
+      } else if (nodo->dato < (*l)->next->dato) {
+        // nodo maggiore di `l` e minore di `l->next`
+        nodo->next = (*l)->next;
+        (*l)->next = nodo;
+      } else {
+        // nodo maggiore sia di `l` sia di `l-next`
+        inserimento_ordinato(&(*l)->next, nodo);
+      }
+    }
+  }
+
+  // `l` era NULL e nodo diventa il primo e solo elemento
+  *l = nodo;
+}
+```
