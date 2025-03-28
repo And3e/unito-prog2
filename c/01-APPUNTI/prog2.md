@@ -100,7 +100,7 @@ struct libro l1; // creo una variabile `l1` di tipologia `libro`
 
 ### Strutture in memoria - `padding`
 
-![Padding](padding.png)
+![Padding](imgs/padding.png)
 
 I sistemi operativi non allocano la memoria a byte ma a gruppi di `4, 8, 16 ... byte`
 
@@ -230,7 +230,7 @@ Creazione di una lista da 3 elementi
     }
     ```
 
-![alt text](liste.png)
+![alt text](imgs/liste.png)
 
 5) Eliminare un elemento della lista
 
@@ -246,7 +246,7 @@ Creazione di una lista da 3 elementi
    }
    ```
 
-   ![Elimina primo elemento dalla lista](elimina-elemento.png)
+   ![Elimina primo elemento dalla lista](imgs/elimina-elemento.png)
 
 6) Aggiungere un elemento in testa
 
@@ -257,8 +257,8 @@ Creazione di una lista da 3 elementi
    }
    ```
 
-   ![Aggiungi elemento nella testa della lista](aggiungi-elemento.png)
+   ![Aggiungi elemento nella testa della lista](imgs/aggiungi-elemento.png)
 
 #### Tipologie di liste
 
-![Tipi di liste](tipi-liste.png)
+![Tipi di liste](imgs/tipi-liste.png)

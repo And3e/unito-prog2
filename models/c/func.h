@@ -3,5 +3,5 @@
 
   #include "stdio.h"
 
-  void ciao();
+  
 #endif

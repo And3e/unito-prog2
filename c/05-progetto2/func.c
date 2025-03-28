@@ -45,7 +45,10 @@ int contactCmp(Contact c1, Contact c2) {
 
   int cmp_name = strcmp(c1_name, c2_name);
 
-  return (cmp_name < 0) ? -1 : (cmp_name > 0 ? 1 : 0);
+  if (cmp_name < 0) {
+    return -1;
+  }
+  return cmp_name > 0;
 }
 
 int contactCmpEff(const Contact *pc1, const Contact *pc2) {
@@ -62,5 +65,8 @@ int contactCmpEff(const Contact *pc1, const Contact *pc2) {
 
   int cmp_name = strcmp(pc1_name, pc2_name);
 
-  return (cmp_name < 0) ? -1 : (cmp_name > 0 ? 1 : 0);
+  if (cmp_name < 0) {
+    return -1;
+  }
+  return cmp_name > 0;
 }
