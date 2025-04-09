@@ -1,5 +1,3 @@
-#include "list_rec.h"
-
 int main() {
 
   return 0;

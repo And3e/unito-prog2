@@ -453,3 +453,348 @@ void inserimento_ordinato(lista *l, lista nodo) {
   *l = nodo;
 }
 ```
+
+## ADT `Abstract Data Type`
+
+- definisco un tipo di dato indipendentemente dalla sua implementazione
+- definisco la struttura dei dati (e i loro valori possibili: il dominio) e le operazioni su di essi
+
+### Esempio: Radio
+
+```c
+#define ON 1
+#define OFF 0
+
+typedef struct {
+  int accensione = OFF;
+  int canale;
+} radio;
+
+/**
+ * @brief data una radio, setta l’accensione a acceso
+ */
+void accendi(radio *r) {
+  r->accensione = ON;
+}
+
+/**
+ * @brief data una radio, setta l’accensione a spento
+ */
+void spegni(radio *r) {
+  r->accensione = OFF;
+}
+
+/**
+ * @brief data una radio, setta la sintonizzazione sul canale specificato
+ */
+void sintonizza(radio *r, int c) {
+  r->canale = c;
+}
+```
+
+### ADT fondamentali
+
+- `pile` (`stack`)
+- `code` (`queue`)
+- `insiemi` (`set`)
+
+#### Pila (Stack)
+
+⟹ **LIFO** - Last In First Out
+
+![Stack](imgs/stack.png)
+
+##### Operazioni dello Stack
+
+- `Push`: aggiungi un elemento in cima allo stack
+
+  ```c
+  void push(<tipo-dato> el, stack *s)
+  ```
+
+- `Pop`: rimuovi un elemento dalla cima dello stack
+
+  ```c
+  <tipo-dato> pop(stack *s)
+  ```
+
+- `Empty`: verifica se lo stack è vuoto
+
+  ```c
+  int empty(stack s)
+  ```
+
+- `Full`: verifica se lo stack è pieno [se limitato]
+
+  ```c
+  int full(stack s)
+  ```
+
+- `Peek`: ottieni il valore in cima allo stack senza rimuoverlo
+
+  ```c
+  <tipo-dato> peek(stack s)
+  ```
+
+#### Coda (Queue)
+
+⟹ **FIFO** - First In First Out
+
+Una coda è un particolare tipo di sequenza in cui gli elementi sono inseriti ad un capo e sono rimossi dal capo opposto
+
+##### Operazioni (principali) della Queue
+
+- `Enqueue`: inserisce un elemento in fondo (tail) alla coda
+
+  ```c
+  void enqueue(tipo-dato el, coda *Q)
+  ```
+
+  ![Enqueue](imgs/enqueue.png)
+
+- `Dequeue`: rimuove un elemento dalla testa (head) della coda
+
+  ```c
+  tipo-dato dequeue(coda *Q)
+  ```
+
+  ![Enqueue](imgs/dequeue.png)
+
+- `Full` / `Empty` / `Peek`
+
+  ```c
+  int full(coda Q)
+  int empty(coda Q)
+  tipo-dato peek(coda Q)
+  ```
+
+- `Init`: inizializza una coda
+
+  ```c
+  void init(coda *Q)
+  ```
+
+
+**Coda circolare**
+
+![Enqueue Circolare](imgs/enqueue_circolare.png)
+
+`N % k`: `N` modulo `k`, *resto della divisione intera* di `N` per `k`.
+
+- si usa per calcolare il successore in un array circolare
+
+Esempio: Coda da 5 elementi
+
+```c
+int successore(int i, int N) {
+  return ((i + 1) % N);
+}
+
+successore(0, 5) → 1
+successore(1, 5) → 2
+...
+successore(4, 5) → 0
+```
+
+#### Insieme (Set, Bunch)
+
+⟹ `∄` NON ESISTE primo e/o ultimo
+
+- Quando lo stesso elemento compare soltanto una volta si parla di ***INSIEME***
+- Quando lo stesso elemento compare più volte si parla di ***MULTI-INSIEME***
+
+##### Operazioni (principali) di un Set
+
+```c
+int elem(tipo-dato el, set S) // test
+int vuoto(set S) // test
+
+void init(set *S) // inizializza a vuoto
+int cardinality(set S) // numero di elementi di S
+
+set *costruisci(tipo-dato x1, ..., xn) // crea un set contenente i valori x1, x2, ..., xn
+set *crea_max(int N) // crea un set di capacità massima N
+
+void aggiungi(set *S, tipo-dato el) // aggiunge `el` al set
+
+void togli(set *S, tipo-dato el) // toglie la prima occorrenza di `el` dal set
+void togli_tutti(set *S, tipo-dato el) // toglie tutte le occorrenze di `el` dal set
+```
+
+
+## Funzioni Variadiche
+
+
+```c
+#include <stdarg.h>
+<valore-ritorno> funzione(argf1 ... argfN, ...)
+
+/*
+P_IN: num ≥ 0, i restanti argomenti, senza nome, sono nel numero indicato da num
+P_OUT: nuovo == set di cardinalità pari a num, i cui valori sono tutti e soli i valori degli argomenti senza nome; nuovo==NULL se num==0
+*/
+void *func(int num, ...) {
+ // `...` indicano che la funzione è variadica
+ //   > devo fare riferimento alla lista degli argomenti
+ //   > devo allocare un set e inserire iterativamente in esso i valori
+
+ // ATTENZIONE: se num è 0 allora restituisco NULL
+
+  va_list ptr; // puntatore alla lista degli argomenti
+  va_start(ptr, num); // il puntatore fa ora riferimento al primo elem dei param opzionali
+  va_arg(ptr, int); // fornita da stdarg, restituisce il dato corrente e aggiorna il puntatore. Richiede che si passi il tipo di dato atteso come valore
+}
+```
+
+---
+
+## Alberi
+
+Differenza tra uno `Stack`/`Queue`/`Set` e un `Albero`/`Grafo`
+
+| `Stack`/`Queue`/`Set`                                | `Albero`/`Grafo`                   |
+| ------------------------------------------------ | ------------------------------------- |
+| ➔ ogni nodo ha (al più) un solo successore e (al più) un solo predecessore diretti                             | ➔ ogni nodo può avere molti successori/predecessori diretti                 |
+
+<br>
+
+Differenza tra un `Albero` e un `Grafo`
+
+| `Albero`                                | `Grafo`                   |
+| ------------------------------------------------ | ------------------------------------- |
+| ➔ ogni nodo può avere molti successori ma ha al più un predecessore diretto                             | ➔ ogni nodo può avere molti successori/predecessori diretti                 |
+
+### Alberi Binari
+
+![Confronto Alberi - Alberi Binari](imgs/alberi_binari.png)
+
+#### Terminologia
+
+- `Radice`
+
+  ![Radice](imgs/radice.png)
+
+- `Nodo Interno`
+
+  ![Nodo Interno](imgs/nodo_interno.png)
+
+- `Foglia`
+
+  ![Foglia](imgs/foglia.png)
+
+  - `Frontiera`
+
+    ![Frontiera](imgs/frontiera.png)
+
+##### **`Archi`**
+
+Un `Arco` è un collegamento orientato fra due nodi
+
+- L’orientamento permette di capire il ruolo dei nodi: chi è **padre** e chi **figlio**
+
+##### **Gerarchia** dei nodi
+
+- `Padre`
+
+  ![Nodo Padre](imgs/nodo_padre.png)
+
+- `Figlio`
+
+  ![Nodo Figlio](imgs/nodo_figlio.png)
+
+- `Antenato`
+
+  ![Nodo Antenato](imgs/nodo_antenato.png)
+
+- `Discendente`
+
+  ![Nodo Discendente](imgs/nodo_discendente.png)
+
+##### **`Percorsi`**
+
+Un `Percorso` è una sequenza di nodi collegati da archi *N1*, *N2*, ..., *Nk* 
+
+- `Percorso Assoluto`
+
+  ![Percorso Assoluto](imgs/percorso_assoluto.png)
+
+- `Percorso Relativo`
+
+  ![Percorso Relativo](imgs/percorso_relativo.png)
+
+##### **`Sottoalberi`**
+
+Un `Sottoalbero` è un albero che fa parte di un albero più grande
+
+Ogni sottoalbero ha una radice
+
+![Sottoalberi](imgs/sottoalberi.png)
+
+
+##### **Distanze**
+
+- `Distanza`
+
+  La distanza tra due nodi N1 e N2 di un albero è il numero di "salti" che occorre fare per raggiungere l’uno dall’altro
+
+  ![Distanza fra due Nodi](imgs/distanza.png)
+
+- `Profondità`
+
+  La distanza di un nodo N dalla radice è un caso particolarmente significativo di distanza: cattura la **profondità** di un nodo
+
+  ![Profondità](imgs/profondità.png)
+
+  - `Profondità dell'albero`
+
+    La profondità di un albero è la profondità massima dei suoi nodi.
+
+    1. Se l’albero contiene solo la radice la profondità è *`0`*
+    2. Se l’albero è vuoto la profondità è *`-1`*
+
+##### ***Grado***
+
+- Il grado di un nodo è il suo **numero di figli**
+- Si dice che un albero di grado `N` è completo quando tutte le sue foglie si trovano a  rofondità `N` e tutti i nodi interni hanno esattamente `N` figli
+
+
+### Alberi Binari Ordinati
+
+Un albero ordinato (spesso chiamato anche albero di ricerca binario) è una struttura dati in cui i nodi sono disposti in modo tale da mantenere un **ordine specifico** che facilita la **ricerca** e altre operazioni
+
+- Contiene valori interi `int`
+
+- Relazione d'ordine: `>` (MAGGIORE)
+
+  ```
+  ∀ n nodo con figli dell’albero
+    ∀ n_sn nodo sottoalbero sinistro di n: ∊
+      valore(s_n) < valore(n)
+    ∀ n_dx nodo sottoalbero destro di n: ∊
+      valore(n) < valore(n_dx)
+  ```
+
+![Albero Ordinato](imgs/albero_ordinato.png)
+
+```c
+typedef struct nodo* tree;
+
+struct nodo {
+  tree left;
+  tree right;
+  <tipo-dato1> dato1;
+  ...
+  <tipo-datoN> datoN;
+}
+```
+
+##### Operazioni (principali) di un Set
+
+```c
+void init(tree *T);
+tree crea_nodo(tipo-dato el);
+void add(tree nuovo, tree *T, ...);
+tree remove(tipo-dato el, tree *T);
+void stampa(tree T);
+int conta_nodi(tree T);
+```

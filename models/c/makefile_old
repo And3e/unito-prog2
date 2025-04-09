@@ -9,15 +9,15 @@ OPZ=-Wall
 # INCLUDE_O=$(SRC_DIR)base.o $(SRC_DIR)conversions.o
 # INCLUDE_H=$(SRC_DIR)base.h $(SRC_DIR)conversions.h
 
-FLAGS=
+FLAGS = -g
 
 ifeq ($(OS),Windows_NT)
 
-main: $(INCLUDE_O) list_rec.o main.o
-	gcc $(FLAGS) -o main main.o $(INCLUDE_O) list_rec.o $(OPZ)
-list_rec.o: list_rec.h $(INCLUDE_H) list_rec.c
-	gcc $(FLAGS) -o list_rec.o -c list_rec.c $(OPZ)
-main.o: list_rec.h main.c
+main: $(INCLUDE_O) func.o main.o
+	gcc $(FLAGS) -o main main.o $(INCLUDE_O) func.o $(OPZ)
+func.o: func.h $(INCLUDE_H) func.c
+	gcc $(FLAGS) -o func.o -c func.c $(OPZ)
+main.o: func.h main.c
 	gcc $(FLAGS) -o main.o -c main.c $(OPZ)
 
 run:
@@ -29,11 +29,11 @@ clear:
 
 else
 
-main: $(INCLUDE_O) list_rec.o main.o
-	gcc $(FLAGS) -o main main.o $(INCLUDE_O) list_rec.o $(OPZ)
-list_rec.o: list_rec.h $(INCLUDE_H) list_rec.c
-	gcc $(FLAGS) -o list_rec.o -c list_rec.c $(OPZ)
-main.o: list_rec.h main.c
+main: $(INCLUDE_O) func.o main.o
+	gcc $(FLAGS) -o main main.o $(INCLUDE_O) func.o $(OPZ)
+func.o: func.h $(INCLUDE_H) func.c
+	gcc $(FLAGS) -o func.o -c func.c $(OPZ)
+main.o: func.h main.c
 	gcc $(FLAGS) -o main.o -c main.c $(OPZ)
 
 run:

@@ -14,6 +14,10 @@ ContactPtr mkContact(char *name, char *surname, char *mobile, char *url) {
     return NULL;
   }
 
+  if ((name == NULL) || (surname == NULL)) {
+    return NULL;
+  }
+
   c->name = name;
   c->surname = surname;
   c->mobile = mobile;
@@ -27,11 +31,9 @@ void dsContact(ContactPtr *cntptr) {
   free(*cntptr);
 }
 
-void updateMobile(ContactPtr cnt, char *newMobile) {
-  strcpy(cnt->mobile, newMobile);
-}
+void updateMobile(ContactPtr cnt, char *newMobile) { cnt->mobile = newMobile; }
 
-void updateUrl(ContactPtr cnt, char *newUrl) { strcpy(cnt->url, newUrl); }
+void updateUrl(ContactPtr cnt, char *newUrl) { cnt->url = newUrl; }
 
 char *getName(const ContactPtr cnt) { return cnt->name; }
 
@@ -68,7 +70,7 @@ _Bool equalsContact(const ContactPtr cnt1, const ContactPtr cnt2) {
   char *cnt1_surname = to_upper(cnt1->surname);
   char *cnt2_surname = to_upper(cnt2->surname);
 
-  return strcmp(cnt1_name, cnt2_name) && strcmp(cnt1_surname, cnt2_surname);
+  return !strcmp(cnt1_name, cnt2_name) && !strcmp(cnt1_surname, cnt2_surname);
 }
 
 int cmpContact(const ContactPtr cnt1, const ContactPtr cnt2) {
