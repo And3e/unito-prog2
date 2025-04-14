@@ -1,9 +1,10 @@
 #ifndef LIST_REC_H
   #define LIST_REC_H
 
-  #include <stdbool.h>
   #include <stdio.h>
-
+  #include <stdlib.h>
+  #include <stdbool.h>
+  
   typedef struct listNode ListNode, *ListNodePtr;
 
   struct listNode {
@@ -11,8 +12,12 @@
     ListNodePtr next;
   };
 
-  // Ritorna una lista contenente tutti i numeri interi compresi tra @m ed @n,
-  // estremi inclusi.
+  void free_list(ListNodePtr list);
+  ListNodePtr getNewNode(int data);
+  void addNode(ListNodePtr *list, int data);
+
+  // Ritorna una lista contenente tutti i numeri interi compresi tra @m ed
+  // @n, estremi inclusi.
   ListNodePtr fromTo_rec(int m, int n);
 
   // Conta il numero di occorrenze di @x nella lista @lp.
