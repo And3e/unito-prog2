@@ -96,7 +96,7 @@ int size(CharQueueADT q) {
 /** @brief Restituisce l'elemento nella posizione data (a partire dalla testa
  * con indice zero) (senza toglierlo), restituisce esito 0/1 */
 _Bool peek(CharQueueADT q, int position, char *res) {
-  if (position < 0 || position >= q->size || res == NULL) {
+  if (position < 0 || q->size == 0 || position >= q->size || res == NULL) {
     return 0;
   }
 
