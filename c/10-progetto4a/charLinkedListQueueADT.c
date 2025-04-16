@@ -2,13 +2,13 @@
 
 /** @brief Restituisce una coda vuota, se non trova memoria restituisce NULL */
 CharQueueADT mkQueue() {
-  CharQueueADT queue = malloc(sizeof(CharQueueADT));
+  CharQueueADT queue = malloc(sizeof(struct charQueue));
 
   if (queue == NULL) {
     return NULL;
   }
 
-  queue->capacity = INITIAL_CAPACITY * pow(2, 0);
+  queue->capacity = INITIAL_CAPACITY;
   queue->a = malloc(queue->capacity);
   queue->size = 0;
   queue->front = 0;
@@ -20,7 +20,7 @@ CharQueueADT mkQueue() {
 /** @brief Distrugge la coda, recuperando la memoria */
 void dsQueue(CharQueueADT *pq) {
   *pq = NULL;
-  free(pq);
+  free(*pq);
 }
 
 /** @brief Aggiunge un elemento in fondo alla coda, restituisce esito 0/1 */
@@ -96,11 +96,16 @@ int size(CharQueueADT q) {
 /** @brief Restituisce l'elemento nella posizione data (a partire dalla testa
  * con indice zero) (senza toglierlo), restituisce esito 0/1 */
 _Bool peek(CharQueueADT q, int position, char *res) {
-  if (position >= q->size) {
+  if (position < 0 || position >= q->size || res == NULL) {
     return 0;
   }
 
   int index = (q->front + position) % q->capacity;
+
+  if (!q->a[index]) {
+    return 0;
+  }
+
   *res = q->a[index];
 
   return 1;

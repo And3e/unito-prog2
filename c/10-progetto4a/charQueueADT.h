@@ -4,7 +4,6 @@
   #include <stdio.h>
   #include <stdlib.h>
   #include <stdbool.h>
-  #include <math.h>
 
   /** Un tipo di dato astratto per le code di char */
   typedef struct charQueue *CharQueueADT;
