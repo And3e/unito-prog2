@@ -26,7 +26,7 @@ void dsQueue(CharQueueADT *pq) {
   while (current != NULL) {
     ListNodePtr temp = current;
     current = current->next;
-    temp = NULL;
+
     free(temp);
   }
 
@@ -36,10 +36,6 @@ void dsQueue(CharQueueADT *pq) {
 
 /* @brief Aggiunge un elemento in fondo alla coda, restituisce esito 0/1 */
 _Bool enqueue(CharQueueADT q, const char e) {
-  if (isEmpty(q)) {
-    return 0;
-  }
-
   ListNodePtr node = malloc(sizeof(struct listNode));
 
   if (node == NULL) {
@@ -49,7 +45,7 @@ _Bool enqueue(CharQueueADT q, const char e) {
   node->data = e;
   node->next = NULL;
 
-  if (q->front == NULL) {
+  if (isEmpty(q)) {
     q->front = node;
     q->rear = node;
   } else {
