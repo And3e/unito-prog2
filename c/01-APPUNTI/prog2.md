@@ -258,11 +258,11 @@ Creazione di una lista da 3 elementi
    }
    ```
 
-   ![Aggiungi elemento nella testa della lista](imgs/aggiungi-elemento.png)
+   ![Aggiungi elemento nella testa della lista](imgs/aggiungi_elemento.png)
 
 #### Tipologie di liste
 
-![Tipi di liste](imgs/tipi-liste.png)
+![Tipi di liste](imgs/tipi_liste.png)
 
 ### Funzioni `ricorsive` su liste
 
@@ -574,12 +574,11 @@ Una coda è un particolare tipo di sequenza in cui gli elementi sono inseriti ad
   void init(coda *Q)
   ```
 
-
 **Coda circolare**
 
 ![Enqueue Circolare](imgs/enqueue_circolare.png)
 
-`N % k`: `N` modulo `k`, *resto della divisione intera* di `N` per `k`.
+`N % k`: `N` modulo `k`, _resto della divisione intera_ di `N` per `k`.
 
 - si usa per calcolare il successore in un array circolare
 
@@ -600,8 +599,8 @@ successore(4, 5) → 0
 
 ⟹ `∄` NON ESISTE primo e/o ultimo
 
-- Quando lo stesso elemento compare soltanto una volta si parla di ***INSIEME***
-- Quando lo stesso elemento compare più volte si parla di ***MULTI-INSIEME***
+- Quando lo stesso elemento compare soltanto una volta si parla di **_INSIEME_**
+- Quando lo stesso elemento compare più volte si parla di **_MULTI-INSIEME_**
 
 ##### Operazioni (principali) di un Set
 
@@ -621,9 +620,7 @@ void togli(set *S, tipo-dato el) // toglie la prima occorrenza di `el` dal set
 void togli_tutti(set *S, tipo-dato el) // toglie tutte le occorrenze di `el` dal set
 ```
 
-
 ## Funzioni Variadiche
-
 
 ```c
 #include <stdarg.h>
@@ -652,17 +649,17 @@ void *func(int num, ...) {
 
 Differenza tra uno `Stack`/`Queue`/`Set` e un `Albero`/`Grafo`
 
-| `Stack`/`Queue`/`Set`                                | `Albero`/`Grafo`                   |
-| ------------------------------------------------ | ------------------------------------- |
-| ➔ ogni nodo ha (al più) un solo successore e (al più) un solo predecessore diretti                             | ➔ ogni nodo può avere molti successori/predecessori diretti                 |
+| `Stack`/`Queue`/`Set`                                                              | `Albero`/`Grafo`                                            |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| ➔ ogni nodo ha (al più) un solo successore e (al più) un solo predecessore diretti | ➔ ogni nodo può avere molti successori/predecessori diretti |
 
 <br>
 
 Differenza tra un `Albero` e un `Grafo`
 
-| `Albero`                                | `Grafo`                   |
-| ------------------------------------------------ | ------------------------------------- |
-| ➔ ogni nodo può avere molti successori ma ha al più un predecessore diretto                             | ➔ ogni nodo può avere molti successori/predecessori diretti                 |
+| `Albero`                                                                    | `Grafo`                                                     |
+| --------------------------------------------------------------------------- | ----------------------------------------------------------- |
+| ➔ ogni nodo può avere molti successori ma ha al più un predecessore diretto | ➔ ogni nodo può avere molti successori/predecessori diretti |
 
 ### Alberi Binari
 
@@ -712,7 +709,7 @@ Un `Arco` è un collegamento orientato fra due nodi
 
 ##### **`Percorsi`**
 
-Un `Percorso` è una sequenza di nodi collegati da archi *N1*, *N2*, ..., *Nk* 
+Un `Percorso` è una sequenza di nodi collegati da archi _N1_, _N2_, ..., _Nk_
 
 - `Percorso Assoluto`
 
@@ -729,7 +726,6 @@ Un `Sottoalbero` è un albero che fa parte di un albero più grande
 Ogni sottoalbero ha una radice
 
 ![Sottoalberi](imgs/sottoalberi.png)
-
 
 ##### **Distanze**
 
@@ -749,14 +745,13 @@ Ogni sottoalbero ha una radice
 
     La profondità di un albero è la profondità massima dei suoi nodi.
 
-    1. Se l’albero contiene solo la radice la profondità è *`0`*
-    2. Se l’albero è vuoto la profondità è *`-1`*
+    1. Se l’albero contiene solo la radice la profondità è _`0`_
+    2. Se l’albero è vuoto la profondità è _`-1`_
 
-##### ***Grado***
+##### **_Grado_**
 
 - Il grado di un nodo è il suo **numero di figli**
-- Si dice che un albero di grado `N` è completo quando tutte le sue foglie si trovano a  rofondità `N` e tutti i nodi interni hanno esattamente `N` figli
-
+- Si dice che un albero di grado `N` è completo quando tutte le sue foglie si trovano a rofondità `N` e tutti i nodi interni hanno esattamente `N` figli
 
 ### Alberi Binari Ordinati
 
@@ -788,7 +783,7 @@ struct nodo {
 }
 ```
 
-##### Operazioni (principali) di un Set
+#### Operazioni (principali) di un Albero
 
 ```c
 void init(tree *T);
@@ -798,3 +793,265 @@ tree remove(tipo-dato el, tree *T);
 void stampa(tree T);
 int conta_nodi(tree T);
 ```
+
+#### Percorrere un Albero
+
+Due modalità:
+
+- Visita in profondità (`depth-first`)
+
+  - visita per primo uno dei nodi più distanti dalla radice
+  - realizzata tramite ricorsione o stack di appoggio
+
+- Visita in ampiezza (`breadth-first`)
+  - esplora l’albero per livelli
+  - realizzata tramite coda FIFO di appoggio
+
+##### Depth First (Profondità)
+
+Una visita ricorsiva è anche detta "con `backtracking`"
+
+- Viene mantenuto in memoria sempre soltanto un solo percorso che inizia nella radice e scende verso una foglia
+
+```
+PREORDER
+  visita nodo
+  visita s.a. sn
+  visita s.a. dx
+
+INORDER
+  visita s.a. sn
+  visita nodo
+  visita s.a. dx
+
+POSTORDER
+  visita s.a. sn
+  visita s.a. dx
+  visita nodo
+```
+
+![Pre Order - In Order - Post Order](imgs/pre_in_post.png)
+
+###### Stampa PRE-IN-POST Order
+
+```c
+void stampaPRE(tree T) {
+  if (T) {
+    printf(“ %d “, T->dato);
+    stampaPRE(T->left);
+    stampaPRE(T->right);
+  } else {
+    printf(“-”);
+  }
+}
+
+--> ABDGECFH <--
+```
+
+```c
+void stampaIN(tree T) {
+  if (T) {
+    stampaIN(T->left);
+    printf(“ %d “, T->dato);
+    stampaIN(T->right);
+  } else {
+    printf(“-”);
+  }
+}
+
+--> DGBEACHF <--
+```
+
+```c
+void stampaPOST(tree T) {
+  if (T) {
+    stampaPOST(T->left);
+    stampaPOST(T->right);
+    printf(“ %d “, T->dato);
+  }
+  else {
+    printf(“-”);
+  }
+}
+
+--> GDEBHFCA <--
+```
+
+###### Visita in profondità con stack (schema)
+
+```c
+alloca stack vuoto
+
+push(stack, radice)
+
+while (!empty(stack)) {
+  current = pop(stack)
+
+  if (current->left)
+    push(current->right)
+
+  if (current->right)
+    push(current->left)
+}
+```
+
+#### Breadth First (Ampiezza)
+
+```c
+alloca coda vuota
+
+enqueue(coda, radice)
+
+while (!empty(coda))
+  nodo=dequeue()
+
+  if (“nodo->left”)
+    enqueue(coda,nodo->left)
+
+  if (“nodo->right”)
+    enqueue(coda,nodo->right)
+```
+
+#### ADD Nodo con percorso
+
+![ADD con percorso](imgs/add_con_percorso.png)
+
+```c
+void add(int el, tree *T, char* path) { }
+```
+
+- `path` è una stringa contenente i caratteri `s`, `d`:
+  - `s`: spostati a sinistra
+  - `d`: spostati a destra
+
+Esempio:
+
+```
+"ssddsd":
+
+sinistra
+sinistra
+destra
+destra
+sinistra
+destra (INSERT when NULL)
+```
+
+#### Add Nodo in Albero Ordinato
+
+L’aggiunta sfrutta l’ordinamento (non serve il path) e deve lasciare l’albero ordinato
+
+#### Rimozione di un Sotto-Albero
+
+![Rimozione Sotto-Albero](imgs/rimozione_sottoalbero.png)
+
+Approccio ricorsivo in **postorder**:
+
+**PER SCENDERE**
+
+- ricorsione a sn
+- ricorsione a dx
+
+**RISALENDO**
+
+- free del nodo
+- ogni sottoalbero viene eliminato prima della sua radice
+
+```c
+void rimuovi_tutto(tree *T) {
+  if (T) {
+    if (*T) {
+      rimuovi_tutto(&(*T)->left);
+      rimuovi_tutto(&(*T)->right);
+      free(*T);
+    }
+  }
+}
+```
+
+### Lettura/Scrittura su File
+
+| `fopen`  | ottiene un tipo di accesso al file |
+| -------- | ---------------------------------- |
+| `feof`   | fine file (bool)                   |
+| `fscan`  | legge da un file                   |
+| `fprint` | scrive in un file                  |
+| `fclose` | rilascia il file                   |
+
+---
+
+| `fopen`  | FILE *fopen(const char *pathname, const char \*mode); |
+| -------- | ----------------------------------------------------- |
+| `feof`   | int feof(FILE \*stream);                              |
+| `fscan`  | int fscanf(FILE *stream, const char *format, ...);    |
+| `fprint` | int fprintf(FILE *stream, const char *format, ...);   |
+| `fclose` | int fclose(FILE \*stream);                            |
+
+- `FILE` è un tipo di dato definito in una libreria
+- `Fopen` apre un file in una modalità (`r`, `w`, …)
+- L’apertura produce un flusso di dati (`FILE*`) la cui
+  direzione (da file, verso il file) dipende dalla modalità di apertura (`r`, `w`, …)
+- Es. `fopen("file", "w")` produce un flusso di dati verso il
+  file che non può essere usato per leggere i contenuti
+
+#### `fopen` R (read)
+
+Apertura in **lettura**
+
+- posizione del `FILE*`: primo byte del file
+- lettura sequenziale
+- ogni lettura sposta il puntatore automaticamente del numero di byte letti
+
+#### `fopen` W (write)
+
+- posizione del `FILE*`: primo byte del file
+- scrittura sequenziale
+- eventuali contenuti precedenti vengono cancellati
+- ogni scrittura sposta il puntatore automaticamente
+- `fclose` ha per argomento il `FILE*`
+  da chiudere
+
+#### `fclose`
+
+- un file aperto va rilasciato
+  - non chiudere il file può creare inconsistenza dei dati
+
+#### `fscan`/`fprint`
+
+**lettura/scrittura:**
+
+- `fscanf` (lettura) e `fprintf` (scrittura) permettono di operare su un `FILE*`
+- entrambe prevedono la specifica di un formato, una stringa che indica cosa **leggere**/**scrivere**
+- il formato è come per printf/scanf
+- seguono ulteriori parametri in numero
+  variabile
+
+#### Esempio
+
+```c
+#include <stdio.h>
+int main() {
+  FILE *fp;
+
+  ...
+
+  fp = fopen("dati.txt", "r");
+
+  if (fp != NULL) {
+    
+    ...
+
+    fclose(fp);
+  } else {
+    // gestisci errore
+  }
+}
+```
+
+
+
+
+
+### Strumenti avanzati per la gestione della memoria
+
+![Nodo Generico](imgs/nodo_generico.png)
