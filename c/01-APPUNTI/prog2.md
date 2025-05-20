@@ -620,6 +620,89 @@ void togli(set *S, tipo-dato el) // toglie la prima occorrenza di `el` dal set
 void togli_tutti(set *S, tipo-dato el) // toglie tutte le occorrenze di `el` dal set
 ```
 
+#### Unioni (Union)
+
+- La parola riservata del linguaggio C union permette di definire tipi composti sintatticamente simili alle struct
+  - MA i campi sono in mutua esclusione (cioè ne esiste uno per volta)
+
+```c
+union myunion {
+  char cval;
+  int ival;
+  float fval;
+} u;
+```
+
+![Utilizzo memoria Union](imgs/utilizzo_memoria_union.png)
+
+```c
+union myunion {
+  char cval;
+  int ival;
+  float fval;
+} u, *ptru;
+
+u.cval = 'h';
+u.ival = 0xDE4D7E91; // sostituisce cval!
+
+ptru = &u;
+ptru->fval = 3.14; // sostituisce ival!
+```
+
+**Esempio di Utilizzo**
+
+```c
+typedef union {
+  nomeITA ni;
+  nomeUSA nu;
+  nomeRus nr;
+  nomeSPA ns;
+} nome;
+```
+
+Il tipo nome può contenere un nome **italiano**
+
+OPPURE un nome **americano**
+
+OPPURE un nome **russo**
+
+OPPURE un nome **spagnolo** ...
+
+##### *Perché "unione"?*
+
+Il tipo determina l’insieme dei valori possibili di una variabile
+
+```c
+union myunion {
+ char cval;
+ int ival;
+} u;
+
+
+// u ∈ {‘a’,’b’, …} ∪ {0, 1, …}
+```
+
+##### Tracciabilità delle Union
+
+È responsabilità del programmatore tenere traccia del tipo attualmente registrato in una **union**
+
+- Un approccio comune è usare una struct (`enum`) e memorizzare in un campo apposito il tipo del dato correntemente memorizzato nella union, ad esempio scegliendo fra i valori di un’enumerazione
+
+```c
+enum Union_Tag { IS_INT, IS_CHAR };
+
+struct TaggedUnion {
+  enum Union_Tag tag;
+
+  union {
+    int i;
+    char c;
+  } data;
+};
+```
+
+
+
 ## Funzioni Variadiche
 
 ```c
@@ -969,7 +1052,7 @@ void rimuovi_tutto(tree *T) {
 }
 ```
 
-### Lettura/Scrittura su File
+## Lettura/Scrittura su File
 
 | `fopen`  | ottiene un tipo di accesso al file |
 | -------- | ---------------------------------- |
@@ -1048,10 +1131,9 @@ int main() {
 }
 ```
 
-
-
-
-
 ### Strumenti avanzati per la gestione della memoria
 
 ![Nodo Generico](imgs/nodo_generico.png)
+
+
+
