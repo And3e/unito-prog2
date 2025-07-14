@@ -121,38 +121,38 @@ int numfree(RAM ram) {
 // https://www.cs.yale.edu/homes/aspnes/pinewiki/C(2f)Structs.html
 typedef struct {
   char *str;
-  size_t lenght, capacity;
+  size_t length, capacity;
 } String;
 
 void init_string(String *s) {
   s->capacity = 128;
-  s->lenght = 0;
+  s->length = 0;
   s->str = malloc(s->capacity);
 
   s->str[0] = '\0';
 }
 
 void append_char(String *s, char c) {
-  if (s->lenght + 2 > s->capacity) {
+  if (s->length + 2 > s->capacity) {
     s->capacity *= 2;
     s->str = realloc(s->str, s->capacity);
   }
 
-  s->str[s->lenght++] = c;
-  s->str[s->lenght] = '\0';
+  s->str[s->length++] = c;
+  s->str[s->length] = '\0';
 }
 
 void append_str(String *s, char *string) {
-  size_t lenght = strlen(string);
+  size_t length = strlen(string);
 
-  if (s->lenght + lenght + 1 > s->capacity) {
-    s->capacity = s->lenght + lenght + 1;
+  if (s->length + length + 1 > s->capacity) {
+    s->capacity = s->length + length + 1;
     s->str = realloc(s->str, s->capacity);
   }
 
-  // copio string in str + lenght
-  memcpy(s->str + s->lenght, string, lenght + 1);
-  s->lenght += lenght;
+  // copio string in str + length
+  memcpy(s->str + s->length, string, length + 1);
+  s->length += length;
 }
 
 void ram2strR(RAM ram, String *out, int lvl, char bud) {
@@ -224,8 +224,8 @@ int split(char *src_string, char delimiter, char ***out_array) {
     }
   }
 
-  char **tokens = malloc((el_count + 1) * sizeof(char *));
-  if (!tokens) {
+  char **nodes = malloc((el_count + 1) * sizeof(char *));
+  if (!nodes) {
     *out_array = NULL;
     return 0;
   }
@@ -238,22 +238,22 @@ int split(char *src_string, char delimiter, char ***out_array) {
     if (*p == delimiter || *p == '\0') {
       size_t len = p - token_start;
 
-      tokens[current] = malloc(len + 1);
+      nodes[current] = malloc(len + 1);
 
-      if (!tokens[current]) {
+      if (!nodes[current]) {
         // cancello tutto se uno non alloca
         for (int i = 0; i < current; i++) {
-          free(tokens[i]);
+          free(nodes[i]);
         }
-        free(tokens);
+        free(nodes);
 
         *out_array = NULL;
         return 0;
       }
 
-      // copio token_start fino a len dentro tokens[current]
-      memcpy(tokens[current], token_start, len);
-      tokens[current][len] = '\0';
+      // copio token_start fino a len dentro nodes[current]
+      memcpy(nodes[current], token_start, len);
+      nodes[current][len] = '\0';
       current++;
 
       if (*p == '\0' || *(p + 1) == '\0') {
@@ -264,9 +264,9 @@ int split(char *src_string, char delimiter, char ***out_array) {
     }
   }
 
-  tokens[current] = NULL;
+  nodes[current] = NULL;
 
-  *out_array = tokens;
+  *out_array = nodes;
 
   return el_count;
 }
@@ -288,7 +288,7 @@ int first_number(char *s) {
   return 0;
 }
 
-void str2ramR(RAM parent, char **tokens, int size, int level) {
+void str2ramR(RAM parent, char **nodes, int size, int level) {
   if (!parent || size <= 0) {
     return;
   }
@@ -299,9 +299,9 @@ void str2ramR(RAM parent, char **tokens, int size, int level) {
 
   // split index
   for (int i = 0; i < size; i++) {
-    int level = first_number(tokens[i]);
+    int level = first_number(nodes[i]);
 
-    const char *p = tokens[i];
+    const char *p = nodes[i];
     while (*p >= '0' && *p <= '9') {
       p++;
     }
@@ -318,16 +318,16 @@ void str2ramR(RAM parent, char **tokens, int size, int level) {
   // left buddy  -->  |---|___|
   if (split > 0) {
     RAM left = initram(parent->KB / 2);
-    
+
     left->parent = parent;
     parent->lbuddy = left;
-    
-    char state = tokens[0][strlen(tokens[0]) - 1];
+
+    char state = nodes[0][strlen(nodes[0]) - 1];
     left->s = (state == 'L' ? LIBERO : state == 'O' ? OCCUPATO : INTERNO);
-    
-    str2ramR(left, tokens + 1, split - 1, child_level);
+
+    str2ramR(left, nodes + 1, split - 1, child_level);
   }
-  
+
   // right buddy  -->  |___|---|
   if (split < size) {
     RAM right = initram(parent->KB / 2);
@@ -335,10 +335,10 @@ void str2ramR(RAM parent, char **tokens, int size, int level) {
     right->parent = parent;
     parent->rbuddy = right;
 
-    char state = tokens[split][strlen(tokens[split]) - 1];
+    char state = nodes[split][strlen(nodes[split]) - 1];
     right->s = (state == 'L' ? LIBERO : state == 'O' ? OCCUPATO : INTERNO);
 
-    str2ramR(right, tokens + 1 + split, size - 1 - split, child_level);
+    str2ramR(right, nodes + 1 + split, size - split - 1, child_level);
   }
 }
 
@@ -347,31 +347,31 @@ RAM str2ram(char *str) {
     return NULL;
   }
 
-  char **tokens;
+  char **nodes;
 
-  int count = split(str, '#', &tokens);
+  int count = split(str, '#', &nodes);
   if (count <= 0) {
     return NULL;
   }
 
   // "<size>:<state>"
-  int size = first_number(tokens[0]);
+  int size = first_number(nodes[0]);
   RAM ram = initram(size);
 
   if (ram) {
-    char state = tokens[0][strlen(tokens[0]) - 1];
+    char state = nodes[0][strlen(nodes[0]) - 1];
     ram->s = (state == 'L' ? LIBERO : state == 'O' ? OCCUPATO : INTERNO);
 
     if (ram->s == INTERNO) {
-      // recurse on all remaining tokens
-      str2ramR(ram, tokens + 1, count - 1, 0);
+      // recurse on all remaining nodes
+      str2ramR(ram, nodes + 1, count - 1, 0);
     }
   }
 
   for (int i = 0; i < count; i++) {
-    free(tokens[i]);
+    free(nodes[i]);
   }
-  free(tokens);
+  free(nodes);
 
   return ram;
 }
